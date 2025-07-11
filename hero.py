@@ -15,7 +15,7 @@ class Hero():
 
     def cameraBind(self):
         
-        base.disableMouse()
+        # base.disableMouse()
 
 
         base.camera.setH(180) # rotate the camera 180 degrees
