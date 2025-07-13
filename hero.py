@@ -1,3 +1,8 @@
+''' variables '''
+
+
+
+
 
 class Hero():
 
@@ -8,15 +13,18 @@ class Hero():
         self.hero.setColor(1, 0.5, 0)
         self.hero.setScale(0.3)
         self.hero.setPos(pos)
+
         self.hero.reparentTo(render)
 
+
         self.cameraBind()
+
         self.accept_events()
+
 
     def cameraBind(self):
         
-        # base.disableMouse()
-
+        base.disableMouse()
 
         base.camera.setH(180) # rotate the camera 180 degrees
         
@@ -24,6 +32,7 @@ class Hero():
         base.camera.setPos(0, 0, 1.5)
 
         self.cameraOn = True # to show if the camera is bound or not
+
 
     def cameraUp(self):
 
@@ -35,8 +44,11 @@ class Hero():
         base.enableMouse()
         self.cameraOn = False
     
+
+
     def accept_events(self):
-        base.accept('c', self.changeView)
+        base.accept('space', self.changeView)
+
 
     def changeView(self):
         if self.cameraOn:

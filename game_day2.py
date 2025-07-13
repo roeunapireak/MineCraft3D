@@ -11,6 +11,8 @@ class Game(ShowBase):
         # self.land.loadLand('land.txt')
 
         self.land = Mapmanager()
+
+        # self.land.loadLand('land.txt')
         x,y = self.land.loadLand('land.txt')
 
         self.hero = Hero(pos=(x//2, y//2, 2), land=self.land)
