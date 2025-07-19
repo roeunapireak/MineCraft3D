@@ -53,27 +53,22 @@ class Hero():
     def accept_events(self):
         base.accept(key_switch_camera, self.changeView)
         base.accept(key_left, self.turn_left)
+        base.accept(key_left + '-repeat', self.turn_left)
+
         base.accept(key_right, self.turn_right)
-
-
-        # base.accept(key_turn_right, self.turn_right)
-        # base.accept(key_turn_right + '-repeat', self.turn_right)
+        base.accept(key_right + '-repeat', self.turn_right)
 
         base.accept(key_forward, self.forward)
-
-        # base.accept(key_forward + '-repeat', self.forward)
+        base.accept(key_forward + '-repeat', self.forward)
 
         base.accept(key_back, self.back)
         base.accept(key_back + '-repeat', self.back)
 
         base.accept(key_turn_left, self.left)
-        # base.accept(key_turn_left + '-repeat', self.turn_left)
-
-        # base.accept(key_left + '-repeat', self.left)
+        base.accept(key_turn_left + '-repeat', self.left)
 
         base.accept(key_turn_right, self.right)
-
-        # base.accept(key_right + '-repeat', self.right)
+        base.accept(key_turn_right + '-repeat', self.right)
 
         base.accept(key_up, self.up)
         base.accept(key_up + '-repeat', self.up)
