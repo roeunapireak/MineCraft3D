@@ -1,6 +1,6 @@
 
 key_switch_camera = 'space' # the camera is bound to the hero or not
-# key_switch_mode = 'z' # can get past obstacles or not
+key_switch_mode = 'z' # can get past obstacles or not
 
 
 key_forward = 'w' # step forward (the direction the camera is pointing in)
@@ -56,8 +56,6 @@ class Hero():
         base.accept(key_right, self.turn_right)
 
 
-        # base.accept(key_turn_left + '-repeat', self.turn_left)
-
         # base.accept(key_turn_right, self.turn_right)
         # base.accept(key_turn_right + '-repeat', self.turn_right)
 
@@ -66,10 +64,10 @@ class Hero():
         # base.accept(key_forward + '-repeat', self.forward)
 
         base.accept(key_back, self.back)
-
-        # base.accept(key_back + '-repeat', self.back)
+        base.accept(key_back + '-repeat', self.back)
 
         base.accept(key_turn_left, self.left)
+        # base.accept(key_turn_left + '-repeat', self.turn_left)
 
         # base.accept(key_left + '-repeat', self.left)
 
@@ -77,6 +75,12 @@ class Hero():
 
         # base.accept(key_right + '-repeat', self.right)
 
+        base.accept(key_up, self.up)
+        base.accept(key_up + '-repeat', self.up)
+        base.accept(key_down, self.down)
+        base.accept(key_down + '-repeat', self.down)
+
+        base.accept(key_switch_mode, self.changeMode)
 
     def changeView(self):
         if self.cameraOn:
@@ -121,13 +125,35 @@ class Hero():
 
         return x_to, y_to, z_from
     
+
+
+
     def just_move(self, angle):
         pos = self.look_at(angle)
         self.hero.setPos(pos)
 
+
+
+    def try_move(self, angle):
+        pos = self.look_at(angle)
+        if self.land.isEmpty(pos):
+            pos = self.land.findHighestEmpty(pos)
+            self.hero.setPos(pos)
+        else:
+            pos = pos[0], pos[1], pos[2] + 1
+            if self.land.isEmpty(pos):
+                self.hero.setPos(pos)
+
+
+
     def move_to(self, angle):
         if self.mode:
             self.just_move(angle)
+        else:
+            self.try_move(angle)
+
+
+
 
     def check_dir(self,angle):
         if angle >= 0 and angle <= 20:
@@ -149,6 +175,17 @@ class Hero():
         else:
             return (0, -1)
         
+    def up(self):
+        if self.mode:
+            self.hero.setZ(self.hero.getZ() + 1)
 
+    def down(self):
+        if self.mode and self.hero.getZ() > 1:
+            self.hero.setZ(self.hero.getZ() - 1)
 
+    def changeMode(self):
+        if self.mode:
+            self.mode = False
+        else:
+            self.mode = True
 
