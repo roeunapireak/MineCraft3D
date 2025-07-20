@@ -1,18 +1,21 @@
 
 key_switch_camera = 'space' # the camera is bound to the hero or not
-# key_switch_mode = 'z' # can get past obstacles or not
+key_switch_mode = 'z' # can get past obstacles or not
 
 
 key_forward = 'w' # step forward (the direction the camera is pointing in)
 key_back = 's' # turn back
 key_left = 'a' # turn left (sideways from the camera)
 key_right = 'd' # step right
+
 key_up = 'e' # step up
 key_down = 'q' # step down
 
 
 key_turn_left = 'n' 
 key_turn_right = 'm' 
+
+
 
 
 class Hero():
@@ -52,30 +55,33 @@ class Hero():
     
     def accept_events(self):
         base.accept(key_switch_camera, self.changeView)
+
         base.accept(key_left, self.turn_left)
+        base.accept(key_left + '-repeat', self.turn_left)
+
         base.accept(key_right, self.turn_right)
-
-
-        # base.accept(key_turn_left + '-repeat', self.turn_left)
-
-        # base.accept(key_turn_right, self.turn_right)
-        # base.accept(key_turn_right + '-repeat', self.turn_right)
+        base.accept(key_right + '-repeat', self.turn_right)
 
         base.accept(key_forward, self.forward)
-
-        # base.accept(key_forward + '-repeat', self.forward)
+        base.accept(key_forward + '-repeat', self.forward)
 
         base.accept(key_back, self.back)
-
-        # base.accept(key_back + '-repeat', self.back)
+        base.accept(key_back + '-repeat', self.back)
 
         base.accept(key_turn_left, self.left)
-
-        # base.accept(key_left + '-repeat', self.left)
+        base.accept(key_turn_left + '-repeat', self.left)
 
         base.accept(key_turn_right, self.right)
+        base.accept(key_turn_right + '-repeat', self.right)
 
-        # base.accept(key_right + '-repeat', self.right)
+        base.accept(key_up, self.up)
+        base.accept(key_up + '-repeat', self.up)
+
+        base.accept(key_down, self.down)
+        base.accept(key_down + '-repeat', self.down)
+
+        base.accept(key_switch_mode, self.changeMode)
+
 
 
     def changeView(self):
@@ -150,5 +156,17 @@ class Hero():
             return (0, -1)
         
 
+    def up(self):
+        if self.mode:
+            self.hero.setZ(self.hero.getZ() + 1)
+
+    def down(self):
+        if self.mode and self.hero.getZ() > 1:
+            self.hero.setZ(self.hero.getZ() - 1)
 
 
+    def changeMode(self):
+        if self.mode:
+            self.mode = False
+        else:
+            self.mode = True
