@@ -1,5 +1,5 @@
 from direct.showbase.ShowBase import ShowBase
-
+import pickle
 
 class Mapmanager():
     
@@ -61,4 +61,81 @@ class Mapmanager():
                 y += 1
 
         return x,y
+
+
+    def isEmpty(self, pos):
+        blocks = self.findBlocks(pos)
+        if blocks:
+            return False
+        else:
+            return True
+
+    def findBlocks(self, pos):
+        return self.land.findAllMatches("=at=" + str(pos))
+    
+
+    def findHighestEmpty(self, pos):
+        x,y,z =pos
+        z = 1
+        while not self.isEmpty((x,y,z)):
+            z = z + 1
+        return (x, y, z)
+
+
+
+    def buildBlock(self, pos):
+        x, y, z = pos
+        new = self.findHighestEmpty(pos)
+        if new[2] <= z + 1:
+            self.addBlock(new)
+
+    def delBlock(self, position):
+        blocks = self.findBlocks(position)
+        for block in blocks:
+            block.removeNode()
+
+    def delBlockFrom(self, position):
+        x, y, z = self.findHighestEmpty(position)
+        pos = x, y, z - 1
+        for block in self.findBlocks(pos):
+            block.removeNode()
+
+
+
+    def saveMap(self):
+        """saves all blocks, including structures, to a binary file"""
+
+        """returns a NodePath collection for all existing blocks on the world map"""
+        blocks = self.land.getChildren()
+        # open a binary file for recording
+        with open('my_map.dat', 'wb') as fout:
+
+            # save the number of blocks at the beginning of the file
+            pickle.dump(len(blocks), fout)
+
+            # go around all the blocks
+            for block in blocks:
+                # save the position
+                x, y, z = block.getPos()
+                pos = (int(x), int(y), int(z))
+                pickle.dump(pos, fout)
+
+    def loadMap(self):
+        # delete all the blocks
+        self.clear()
+
+        # open a binary file for reading
+        with open('my_map.dat', 'rb') as fin:
+            
+            # read the number of blocks
+            length = pickle.load(fin)
+
+            for i in range(length):
+                # read the position
+                pos = pickle.load(fin)
+
+                # create a new block
+                self.addBlock(pos)
+
+
 

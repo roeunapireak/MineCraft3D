@@ -16,6 +16,12 @@ key_turn_left = 'n'
 key_turn_right = 'm' 
 
 
+key_build = 'b' # build a block in front of you
+key_destroy = 'v' # destroy the block in front of you
+
+key_savemap = 'k'
+key_loadmap = 'l'
+
 
 
 class Hero():
@@ -83,6 +89,13 @@ class Hero():
         base.accept(key_switch_mode, self.changeMode)
 
 
+        base.accept(key_build, self.build)
+        base.accept(key_destroy, self.destroy)
+
+        base.accept(key_savemap, self.land.saveMap)
+        base.accept(key_loadmap, self.land.loadMap)
+
+
 
     def changeView(self):
         if self.cameraOn:
@@ -134,6 +147,22 @@ class Hero():
     def move_to(self, angle):
         if self.mode:
             self.just_move(angle)
+        else:
+            self.try_move(angle)
+
+
+    def try_move(self, angle):
+        pos = self.look_at(angle)
+
+        if self.land.isEmpty(pos):
+            pos = self.land.findHighestEmpty(pos)
+            self.hero.setPos(pos)
+
+        else:
+            pos = pos[0], pos[1], pos[2] + 1
+            if self.land.isEmpty(pos):
+                self.hero.setPos(pos)
+
 
     def check_dir(self,angle):
         if angle >= 0 and angle <= 20:
@@ -170,3 +199,25 @@ class Hero():
             self.mode = False
         else:
             self.mode = True
+
+    
+
+    def build(self):
+        angle = self.hero.getH() % 360
+        pos = self.look_at(angle)
+        if self.mode:
+            self.land.addBlock(pos)
+        else:
+            self.land.buildBlock(pos)
+
+    def destroy(self):
+        angle = self.hero.getH() % 360
+        pos = self.look_at(angle)
+        if self.mode:
+            self.land.delBlock(pos)
+        else:
+            self.land.delBlockFrom(pos)
+
+
+
+
